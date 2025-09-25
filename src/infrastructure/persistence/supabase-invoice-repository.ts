@@ -5,6 +5,12 @@ import { SupabaseClient } from "@supabase/supabase-js";
 export class SupabaseInvoiceRepository implements InvoiceRepository {
   constructor(private supabase: SupabaseClient) {}
 
+  async findAll(): Promise<Invoice[]> {
+    const { data, error } = await this.supabase.from("invoices").select("*");
+    if (error) throw error;
+    return data;
+  }
+
   async create(invoice: Invoice): Promise<void> {
     const { error } = await this.supabase.from("invoices").insert(invoice);
     if (error) throw error;
